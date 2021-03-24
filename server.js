@@ -12,10 +12,6 @@ app.set('view engine', 'ejs')
 app.use('/articles', articleRouter)
 
 
-
-
-
-
 //lets create a route using app, which takes in a request and a response
 app.get('/', (req,res)=>{
     //creating an article variable to store the data for each article
@@ -27,17 +23,7 @@ app.get('/', (req,res)=>{
 
     //to render the index.ejs
     //we can pass any object any keys
-    res.render('index', { articles: articles })
+    res.render('articles/index', { articles: articles })
 })
-
-
-
-
-
-
-
-
-
-
 
 app.listen(5000)
