@@ -4,14 +4,16 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "startBlog" : "nodemon server.js"
+    "startBlog": "nodemon server.js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "bootstrap": "^5.0.0-beta3",
     "ejs": "^3.1.6",
     "express": "^4.17.1",
+    "hugo": "^0.0.3",
     "mongoose": "^5.12.2"
   },
   "devDependencies": {
