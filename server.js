@@ -1,4 +1,5 @@
 const express = require ('express');
+const articleRouter = require('./routes/articles')
 
 const app = express();
 
@@ -6,9 +7,18 @@ const app = express();
 app.set('view engine', 'ejs')
 
 
+//tell the app to use the article router
+app.use('/articles',articleRouter)
+
+
+
+
+
+
 //lets create a route using app, which takes in a request and a response
 app.get('/', (req,res)=>{
-    res.send("Hello");
+    //to render the index.ejs
+    res.render('index')
 })
 
 
