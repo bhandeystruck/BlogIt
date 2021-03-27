@@ -1,21 +1,22 @@
 const express = require ('express');
 const articleRouter = require('./routes/articles')
+const mongoose = require('mongoose');
 
+//connect to database
+mongoose.connect('mongodb://localhost/blog', {useNewUrlParser: true, useUnifiedTopology: true})
 //express variable
 const app = express();
-
 //set up view engine to ejs
 app.set('view engine', 'ejs')
+app.use(express.urlencoded({extended:false}))
 
 
-//tell the app to use the article router
-app.use('/articles', articleRouter)
 
 
 //lets create a route using app, which takes in a request and a response
 app.get('/', (req,res)=>{
     //creating an article variable to store the data for each article
-    const articles = [{
+    const article = [{
         title:'Test Article',
         createdAt: new Date(),
         description: 'Test Description'
@@ -23,7 +24,13 @@ app.get('/', (req,res)=>{
 
     //to render the index.ejs
     //we can pass any object any keys
-    res.render('articles/index', { articles: articles })
-})
+    res.render('articles/index', { article: article })
+});
+
+
+
+//tell the app to use the article router
+app.use('/articles', articleRouter)
+
 
 app.listen(5000)
