@@ -10,6 +10,17 @@ router.get('/',(req,res)=>{
     res.send("In articles Router")
 })
 
+router.post('/', async(req,res, next) =>{
+    req.article = new Article()
+    next()
+}, saveArticleAndRedirect('new'))
+
+router.put('/:id', async(req,res)=>{
+    req.article = await Article.findById(req.params.id)
+    next()
+}, saveArticleAndRedirect('edit'))
+
+
 
 //lets create a new route for new article button to route to
 router.get('/new', (req,res) =>{
@@ -18,9 +29,17 @@ router.get('/new', (req,res) =>{
 })
 
 
-router.get('/:id', async(req,res)=>{
-    //access the article
+router.get('/edit/:id', async (req,res) =>{
     const article =  await Article.findById(req.params.id)
+    //lets make it render the new ejs when requested
+    res.render('articles/edit', {article: article});
+})
+
+
+
+router.get('/:slug', async(req,res)=>{
+    //access the article
+    const article =  await Article.findOne({slug: req.params.slug})
     //if user dosnt find article send back to home page
     if(article == null)
     {
@@ -40,7 +59,7 @@ router.post('/', async (req,res)=>{
     })
     try{
         article = await article.save()
-        res.redirect(`/articles/${article.id}`)
+        res.redirect(`/articles/${article.slug}`)
     }
     catch(e){
         console.log(e)
@@ -48,6 +67,40 @@ router.post('/', async (req,res)=>{
     }
     
 
+})
+
+
+
+function saveArticleAndRedirect(path){
+    return async (req,res) =>{
+        let article = req.article
+        article.title= req.body.title
+        article.description= req.body.description
+        article.markdown= req.body.markdown
+        try{
+            article = await article.save()
+            res.redirect(`/articles/${article.slug}`)
+        }
+        catch(e){
+            console.log(e)
+            res.render(`articles/${path}`, {article:article})
+        }
+        
+    
+    }
+}
+
+
+
+
+
+
+
+//what happens when delete
+router.delete('/:id', async (req,res) =>{
+    await Article.findByIdAndDelete(req.params.id)
+    //redirect us back to the homepage
+    res.redirect('/')
 })
 
 
